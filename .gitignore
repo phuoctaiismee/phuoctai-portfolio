@@ -1,0 +1,29 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+out/
+
+# Sanity build output
+studio/dist/
+studio/.sanity/
+
+# Production/local env files
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Agent/editor folders
+.agents/
+.gemini/
+.vscode/
+.idea/
+*.log
