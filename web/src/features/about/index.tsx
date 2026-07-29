@@ -55,9 +55,11 @@ export default async function AboutScreen() {
           <Heading tag="h1" animateEntrance={true} className="text-center text-black">
             {firstName}
           </Heading>
-          <Heading tag="h1" animateEntrance={true} className="text-center text-black -mt-6">
-            {lastName}
-          </Heading>
+          <div className="-mt-4 lg:-mt-6">
+            <Heading tag="h1" animateEntrance={true} className="text-center text-black">
+              {lastName}
+            </Heading>
+          </div>
         </div>
       </Bounded>
 

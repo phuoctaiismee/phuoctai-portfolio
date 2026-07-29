@@ -24,9 +24,11 @@ export default async function ContactScreen() {
           <Heading tag="h1" animateEntrance={true} className="text-left text-black">
             Shoot a
           </Heading>
-          <Heading tag="h1" animateEntrance={true} delay={0.15} className="text-left leading-normal -mt-12 text-black">
-            Request
-          </Heading>
+          <div className="-mt-6 lg:-mt-12">
+            <Heading tag="h1" animateEntrance={true} delay={0.15} className="text-left leading-normal text-black">
+              Request
+            </Heading>
+          </div>
         </div>
       </Bounded>
 

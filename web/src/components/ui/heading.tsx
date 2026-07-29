@@ -40,7 +40,7 @@ export default function TextHeading({
         - px-6: Mở rộng vùng đệm 2 bên trái/phải lên 24px (chắc chắn đủ chứa nét viền chữ lớn nhất).
         - -mx-6: Bù trừ lại đúng 24px để layout tổng thể của trang KHÔNG BI BỊ LỆCH hay thay đổi vị trí.
       */
-      <div className="overflow-hidden px-6 -mx-6">
+      <div className="overflow-hidden px-6 -mx-6 pt-[0.1em] -mt-[0.1em] pb-[1em] -mb-[1em]">
         <motion.div
           initial={{ opacity: 0, y: yEntrance }}
           animate={{ opacity: 1, y: 0 }}

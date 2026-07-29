@@ -66,10 +66,10 @@ export default function FooterBar({ profile, appSettings }: FooterBarProps) {
           {footerCta}
         </motion.h2>
 
-        <div className="flex items-center gap-8">
+        <div className="flex flex-wrap items-center gap-4">
           <Button
             href="/contact"
-            className="bg-white text-black hover:bg-transparent hover:text-white border border-white px-[40px] py-[20px]"
+            className="bg-white text-black hover:bg-transparent hover:text-white border border-white px-[28px] py-[14px] md:px-[40px] md:py-[20px]"
           >
             Get in Touch
           </Button>

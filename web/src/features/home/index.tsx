@@ -40,9 +40,11 @@ const HomeScreen = async () => {
           <Heading tag="h1" animateEntrance={true} className="text-left text-black">
             {firstName}
           </Heading>
-          <Heading tag="h1" animateEntrance={true} delay={0.15} className="text-left leading-normal -mt-12 text-black">
-            {lastName}
-          </Heading>
+          <div className="-mt-6 lg:-mt-12">
+            <Heading tag="h1" animateEntrance={true} delay={0.15} className="text-left leading-normal text-black">
+              {lastName}
+            </Heading>
+          </div>
         </div>
         <motion.img
           initial={{ opacity: 0, x: 100 }}
