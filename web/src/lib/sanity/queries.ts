@@ -161,3 +161,17 @@ export const WORK_QUERY = defineQuery(
 export const APP_SETTINGS_QUERY = defineQuery(
   `*[_type == "app-settings"][0]{ ... }`
 )
+
+export const EXPERIENCES_QUERY = defineQuery(
+  `*[_type == "experience"] | order(startDate desc) {
+    _id,
+    companyName,
+    role,
+    location,
+    startDate,
+    currentJob,
+    endDate,
+    description,
+    techStack
+  }`
+)

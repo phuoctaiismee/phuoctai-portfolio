@@ -1,6 +1,6 @@
 import { sanityFetch } from '@/lib/sanity/live'
-import { PROFILE_QUERY } from '@/lib/sanity/queries'
-import { ProfileData } from '@/core/entities'
+import { PROFILE_QUERY, EXPERIENCES_QUERY } from '@/lib/sanity/queries'
+import { ProfileData, ExperienceData } from '@/core/entities'
 import { SkillsList } from './components/skills-list'
 import Bounded from '@/components/layout/bounded'
 import Heading from '@/components/ui/heading'
@@ -12,6 +12,7 @@ import Image from 'next/image'
 import SectionHeader from '@/components/ui/section-header'
 import ServicesHoverList from './components/services_hover_list'
 import FaqList from './components/faq_list'
+import { ExperienceList } from './components/experience-list'
 
 const portableTextComponents = {
   block: {
@@ -24,8 +25,12 @@ const portableTextComponents = {
 }
 
 export default async function AboutScreen() {
-  const profileResult = await sanityFetch({ query: PROFILE_QUERY })
+  const [profileResult, experiencesResult] = await Promise.all([
+    sanityFetch({ query: PROFILE_QUERY }),
+    sanityFetch({ query: EXPERIENCES_QUERY }),
+  ])
   const profile = profileResult.data as ProfileData | null
+  const experiences = (experiencesResult.data || []) as ExperienceData[]
 
   const firstName = profile?.firstName || 'PHUOC'
   const lastName = profile?.lastName || 'TAI'
@@ -125,6 +130,16 @@ export default async function AboutScreen() {
             >
               <PortableText value={profile.longBio} components={portableTextComponents} />
             </motion.div>
+          </div>
+        </Bounded>
+      )}
+
+      {/* Experience Section */}
+      {experiences && experiences.length > 0 && (
+        <Bounded as="section" paddingY="py-20">
+          <div className="flex flex-col gap-[30px]">
+            <SectionHeader title="experience." />
+            <ExperienceList experiences={experiences} />
           </div>
         </Bounded>
       )}
