@@ -1,6 +1,7 @@
 export interface WorkItem {
   _id: string
   title: string
+  featured?: boolean
   slug: string
   coverImage?: any
   industry?: string
@@ -10,6 +11,7 @@ export interface WorkItem {
 export interface CaseStudyDetail {
   _id: string
   title: string
+  featured?: boolean
   slug: string
   coverImage?: any
   industry: string
@@ -18,6 +20,10 @@ export interface CaseStudyDetail {
   experience?: string
   liveLink?: string
   githubLink?: string
+  projectType?: 'desktop' | 'mobile'
+  figmaLink?: string
+  appStoreLink?: string
+  playStoreLink?: string
   skills?: string[]
   aboutRichText: any[] // PortableText
   aboutGallery?: any[] // Images

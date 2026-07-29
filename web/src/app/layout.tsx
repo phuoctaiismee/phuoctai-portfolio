@@ -50,7 +50,11 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground">
         {/* Main Content Wrapper (covers the footer and slides up on scroll) */}
         <div className="relative z-10 bg-background min-h-screen mb-[100vh] shadow-2xl">
-          <NavigationBar navLinks={appSettings?.navLinks} profile={profile} />
+          <NavigationBar
+            navLinks={appSettings?.navLinks}
+            logoText={appSettings?.logoText}
+            copyrightName={appSettings?.copyrightName || profile?.displayName}
+          />
           <main className="flex flex-col flex-1">{children}</main>
         </div>
         <FooterBar profile={profile} appSettings={appSettings} />

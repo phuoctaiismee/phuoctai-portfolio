@@ -1,3 +1,14 @@
+export interface ServiceItem {
+  _key?: string
+  name: string
+  image: string
+}
+
+export interface FaqItem {
+  question: string
+  answer: string
+}
+
 export interface ProfileData {
   _id: string
   firstName: string
@@ -13,9 +24,12 @@ export interface ProfileData {
   aboutImageUrl?: string
   aboutDescription?: string
   skillsGroups?: Array<{
+    _key?: string
     category: string
     skills: string[]
   }>
+  services?: ServiceItem[]
+  faqs?: FaqItem[]
 }
 
 

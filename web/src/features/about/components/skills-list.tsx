@@ -15,9 +15,9 @@ interface SkillsListProps {
 export function SkillsList({ skillsGroups, className }: SkillsListProps) {
   return (
     <div className={cn('grid grid-cols-1 sm:grid-cols-2 gap-8', className)}>
-      {skillsGroups.map((group) => (
+      {skillsGroups.map((group, idx) => (
         <div
-          key={group._key}
+          key={group._key || idx}
           className="bg-[#F5F5F5] border border-[#EAEAEA] rounded-none p-6 hover:bg-black hover:text-white transition-all duration-300 group"
         >
           <h3 className="text-sm font-semibold uppercase tracking-widest text-[#808080] group-hover:text-[#B3B3B3] mb-4 transition-colors">

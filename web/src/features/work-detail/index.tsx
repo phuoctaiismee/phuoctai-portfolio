@@ -1,4 +1,3 @@
-import React from 'react'
 import { notFound } from 'next/navigation'
 import { sanityFetch } from '@/lib/sanity/live'
 import { WORK_DETAIL_QUERY, RELATED_WORKS_QUERY } from '@/lib/sanity/queries'
@@ -10,14 +9,87 @@ import * as motion from 'framer-motion/client'
 import GalleryGrid from './components/gallery_grid'
 import Bounded from '@/components/layout/bounded'
 import { CaseStudyDetail, WorkItem } from '@/core/entities'
+import Image from 'next/image'
+import SectionHeader from '@/components/ui/section-header'
 
 const portableTextComponents = {
   block: {
     normal: ({ children }: any) => (
-      <p className="text-lg lg:text-xl font-medium text-black leading-tight tracking-tighter">
+      <p className="text-lg lg:text-xl font-medium text-black leading-tight tracking-tighter mb-6 last:mb-0">
         {children}
       </p>
     ),
+    h1: ({ children }: any) => (
+      <h1 className="text-3xl lg:text-4xl font-bold text-black mt-8 mb-4 tracking-tighter">
+        {children}
+      </h1>
+    ),
+    h2: ({ children }: any) => (
+      <h2 className="text-2xl lg:text-3xl font-bold text-black mt-6 mb-3 tracking-tighter">
+        {children}
+      </h2>
+    ),
+    h3: ({ children }: any) => (
+      <h3 className="text-xl lg:text-2xl font-semibold text-black mt-4 mb-2 tracking-tighter">
+        {children}
+      </h3>
+    ),
+    h4: ({ children }: any) => (
+      <h4 className="text-lg lg:text-xl font-semibold text-black mt-3 mb-2 tracking-tighter">
+        {children}
+      </h4>
+    ),
+    blockquote: ({ children }: any) => (
+      <blockquote className="border-l-4 border-black pl-4 italic my-4 text-gray-700">
+        {children}
+      </blockquote>
+    ),
+  },
+  list: {
+    bullet: ({ children }: any) => (
+      <ul className="list-disc pl-6 my-4 space-y-2 text-lg lg:text-xl font-medium text-black leading-tight tracking-tighter">
+        {children}
+      </ul>
+    ),
+    number: ({ children }: any) => (
+      <ol className="list-decimal pl-6 my-4 space-y-2 text-lg lg:text-xl font-medium text-black leading-tight tracking-tighter">
+        {children}
+      </ol>
+    ),
+  },
+  listItem: {
+    bullet: ({ children }: any) => (
+      <li className="text-lg lg:text-xl font-medium text-black leading-tight tracking-tighter">
+        {children}
+      </li>
+    ),
+    number: ({ children }: any) => (
+      <li className="text-lg lg:text-xl font-medium text-black leading-tight tracking-tighter">
+        {children}
+      </li>
+    ),
+  },
+  marks: {
+    strong: ({ children }: any) => <strong className="font-bold text-black">{children}</strong>,
+    em: ({ children }: any) => <em className="italic">{children}</em>,
+    code: ({ children }: any) => (
+      <code className="bg-[#F5F5F5] text-black px-1.5 py-0.5 rounded font-mono text-sm">
+        {children}
+      </code>
+    ),
+    link: ({ value, children }: any) => {
+      const target = (value?.href || '').startsWith('http') ? '_blank' : undefined
+      return (
+        <a
+          href={value?.href}
+          target={target}
+          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+          className="text-black underline underline-offset-4 hover:opacity-75 transition-opacity font-semibold"
+        >
+          {children}
+        </a>
+      )
+    },
   },
 }
 
@@ -51,80 +123,122 @@ export default async function WorkDetailPage({ params }: Props) {
       >
         {/* Metadata in top right */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6, duration: 0.8, ease: 'easeOut' }}
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.08,
+                delayChildren: 0.6,
+              },
+            },
+          }}
+          initial="hidden"
+          animate="visible"
           className="flex flex-row flex-wrap lg:flex-col gap-x-8 gap-y-4 lg:gap-2 text-left lg:text-right lg:-mb-32 lg:-mt-10 z-10"
         >
-          <div>
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 15 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+              },
+            }}
+          >
             <span className="text-base uppercase text-[#B3B3B3] block">
               Industry
             </span>
-            <motion.span
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.20 }}
-              className="text-lg uppercase font-medium text-black block">
+            <span className="text-lg uppercase font-medium text-black block">
               {work.industry || '—'}
-            </motion.span>
-          </div>
+            </span>
+          </motion.div>
+
           {work.client && (
-            <div>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+                },
+              }}
+            >
               <span className="text-base uppercase text-[#B3B3B3] block">
                 Client
               </span>
-              <motion.span
-                initial={{ opacity: 0, x: 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.40 }}
-                className="text-lg uppercase font-medium text-black block">
+              <span className="text-lg uppercase font-medium text-black block">
                 {work.client}
-              </motion.span>
-            </div>
+              </span>
+            </motion.div>
           )}
-          <div>
+
+          <motion.div
+            variants={{
+              hidden: { opacity: 0, y: 15 },
+              visible: {
+                opacity: 1,
+                y: 0,
+                transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+              },
+            }}
+          >
             <span className="text-base uppercase text-[#B3B3B3] block">
               Year
             </span>
-            <motion.span
-              initial={{ opacity: 0, x: 100 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.60 }}
-              className="text-lg uppercase font-medium text-black block">
+            <span className="text-lg uppercase font-medium text-black block">
               {work.year || '—'}
-            </motion.span>
-          </div>
+            </span>
+          </motion.div>
+
           {work.experience && (
-            <div>
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+                },
+              }}
+            >
               <span className="text-base uppercase text-[#B3B3B3] block">
                 Position
               </span>
-              <motion.span
-                initial={{ opacity: 0, x: 100 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1], delay: 0.80 }}
-                className="text-lg uppercase font-medium text-black block">
+              <span className="text-lg uppercase font-medium text-black block">
                 {work.experience}
-              </motion.span>
-            </div>
+              </span>
+            </motion.div>
           )}
+
           {work.skills && work.skills.length > 0 && (
-            <div className="max-w-[200px] lg:ms-auto">
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
+                },
+              }}
+              className="max-w-[200px] lg:ms-auto"
+            >
               <span className="text-base uppercase text-[#B3B3B3] block">
                 Tech Stack
               </span>
               <div className="flex flex-wrap gap-1 justify-start lg:justify-end mt-1">
                 {work.skills.map((skill) => (
-                  <span key={skill} className="text-xs uppercase bg-[#F5F5F5] text-black px-1.5 py-0.5 font-medium">
+                  <span
+                    key={skill}
+                    className="text-xs uppercase bg-[#F5F5F5] text-black hover:bg-black hover:text-white transition-colors duration-300 px-2.5 py-1.5 font-semibold"
+                  >
                     {skill}
                   </span>
                 ))}
               </div>
-            </div>
+            </motion.div>
           )}
         </motion.div>
 
@@ -136,12 +250,15 @@ export default async function WorkDetailPage({ params }: Props) {
           className="w-full flex flex-col md:flex-row items-start md:items-end gap-[40px] xl:gap-[70px] mt-12 lg:mt-0"
         >
           {/* Cover image left */}
-          <div className="w-full md:w-[50%] h-[300px] md:h-[475px] bg-[#F5F5F5] overflow-hidden select-none">
+          <div className="w-full md:w-[50%] h-[300px] md:h-[475px] bg-[#F5F5F5] overflow-hidden select-none flex items-center justify-center relative">
             {work.coverImage ? (
-              <img
-                src={urlFor(work.coverImage).width(1000).height(800).url()}
+              <Image
+                src={urlFor(work.coverImage).width(1000).url()}
                 alt={work.title}
-                className="w-full h-full object-cover"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+                priority
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-[16px] xl:text-[20px] text-[#B3B3B3]">
@@ -163,25 +280,27 @@ export default async function WorkDetailPage({ params }: Props) {
 
       {/* 1. ABOUT SECTION */}
       <section className="flex flex-col w-full gap-[30px] py-12">
-        <motion.div
-          initial={{ opacity: 0, y: 160 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '100px 0px' }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-end justify-between pb-2 border-b border-[#F5F5F5]"
-        >
-          <h2 className="text-[19px] md:text-[24px] xl:text-[30px] font-medium tracking-[-0.03em]">about.</h2>
-          <div className="flex gap-4">
-            {work.githubLink && (
-              <Button href={work.githubLink} className="bg-black text-white hover:bg-[#333]">
-                GitHub
-              </Button>
-            )}
-            {work.liveLink && (
-              <Button href={work.liveLink}>See It Live</Button>
-            )}
+        <SectionHeader title="about.">
+          <div className="flex flex-wrap gap-4">
+            {[
+              { url: work.liveLink, label: 'See It Live' },
+              { url: work.appStoreLink, label: 'App Store' },
+              { url: work.playStoreLink, label: 'Google Play' },
+              { url: work.githubLink, label: 'GitHub' },
+              { url: work.figmaLink, label: 'Figma' },
+            ]
+              .filter((link) => link.url)
+              .map((link, idx) => (
+                <Button
+                  key={link.url}
+                  href={link.url}
+                  className={idx === 0 ? 'bg-black text-white hover:bg-[#333]' : ''}
+                >
+                  {link.label}
+                </Button>
+              ))}
           </div>
-        </motion.div>
+        </SectionHeader>
 
         <div className="w-full flex flex-col gap-[40px]">
           {work.aboutRichText && (
@@ -199,7 +318,7 @@ export default async function WorkDetailPage({ params }: Props) {
             </motion.div>
           )}
           {work.aboutGallery && work.aboutGallery.length > 0 && (
-            <GalleryGrid images={work.aboutGallery as any[]} alt="About gallery image" />
+            <GalleryGrid images={work.aboutGallery as any[]} alt="About gallery image" projectType={work.projectType} />
           )}
         </div>
       </section>
@@ -207,15 +326,7 @@ export default async function WorkDetailPage({ params }: Props) {
       {/* 2. CHALLENGE SECTION (CONDITIONAL) */}
       {work.challengeRichText && (
         <section className="flex flex-col w-full gap-[30px] py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 160 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '100px 0px' }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-end justify-between pb-2 border-b border-[#F5F5F5]"
-          >
-            <h2 className="text-[19px] md:text-[24px] xl:text-[30px] font-medium tracking-[-0.03em]">challenge.</h2>
-          </motion.div>
+          <SectionHeader title="challenge." />
 
           <div className="w-full flex flex-col gap-[40px]">
             <motion.div
@@ -231,7 +342,7 @@ export default async function WorkDetailPage({ params }: Props) {
               />
             </motion.div>
             {work.challengeGallery && work.challengeGallery.length > 0 && (
-              <GalleryGrid images={work.challengeGallery as any[]} alt="Challenge gallery image" />
+              <GalleryGrid images={work.challengeGallery as any[]} alt="Challenge gallery image" imageFit="contain" />
             )}
           </div>
         </section>
@@ -240,15 +351,7 @@ export default async function WorkDetailPage({ params }: Props) {
       {/* 3. RESULTS SECTION (CONDITIONAL) */}
       {work.resultRichText && (
         <section className="flex flex-col w-full gap-[30px] py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 160 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '100px 0px' }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-end justify-between pb-2 border-b border-[#F5F5F5]"
-          >
-            <h2 className="text-[19px] md:text-[24px] xl:text-[30px] font-medium tracking-[-0.03em]">results.</h2>
-          </motion.div>
+          <SectionHeader title="results." />
 
           <div className="w-full flex flex-col gap-[40px]">
             <motion.div
@@ -264,7 +367,7 @@ export default async function WorkDetailPage({ params }: Props) {
               />
             </motion.div>
             {work.resultGallery && work.resultGallery.length > 0 && (
-              <GalleryGrid images={work.resultGallery as any[]} alt="Result gallery image" />
+              <GalleryGrid images={work.resultGallery as any[]} alt="Result gallery image" imageFit='contain' />
             )}
           </div>
         </section>
@@ -273,15 +376,7 @@ export default async function WorkDetailPage({ params }: Props) {
       {/* 4. TESTIMONIAL SECTION (CONDITIONAL) */}
       {work.testimonialQuote && (
         <section className="flex flex-col w-full gap-[30px] py-12">
-          <motion.div
-            initial={{ opacity: 0, y: 160 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '100px 0px' }}
-            transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-            className="flex items-end justify-between pb-2 border-b border-[#F5F5F5]"
-          >
-            <h2 className="text-[19px] md:text-[24px] xl:text-[30px] font-medium tracking-[-0.03em]">testimonial.</h2>
-          </motion.div>
+          <SectionHeader title="testimonial." />
 
           <motion.div
             initial={{ opacity: 0, y: 160 }}
@@ -311,14 +406,18 @@ export default async function WorkDetailPage({ params }: Props) {
             {/* Author Row */}
             <div className="flex flex-row items-center gap-4">
               {work.testimonialAuthorAvatar ? (
-                <img
-                  src={urlFor(work.testimonialAuthorAvatar)
-                    .width(160)
-                    .height(160)
-                    .url()}
-                  alt={work.testimonialAuthorName || 'Author'}
-                  className="w-[80px] h-[80px] rounded-full object-cover select-none"
-                />
+                <div className="w-[80px] h-[80px] rounded-full overflow-hidden relative select-none">
+                  <Image
+                    src={urlFor(work.testimonialAuthorAvatar)
+                      .width(160)
+                      .height(160)
+                      .url()}
+                    alt={work.testimonialAuthorName || 'Author'}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
+                  />
+                </div>
               ) : (
                 <div className="w-[80px] h-[80px] rounded-full bg-[#F5F5F5] flex items-center justify-center text-[16px] xl:text-[20px] text-[#B3B3B3]">
                   —

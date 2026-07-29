@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
-import { ProfileData } from '@/core/entities'
 
 const menuContainerVariants = {
   hidden: {},
@@ -40,10 +39,15 @@ interface NavigationBarProps {
     label: string
     href: string
   }>
-  profile?: ProfileData | null
+  logoText?: string
+  copyrightName?: string
 }
 
-export default function NavigationBar({ navLinks: customNavLinks, profile }: NavigationBarProps) {
+export default function NavigationBar({
+  navLinks: customNavLinks,
+  logoText: customLogoText,
+  copyrightName: customCopyrightName,
+}: NavigationBarProps) {
   const [isOpen, setIsOpen] = useState(false)
 
   const defaultNavLinks = [
@@ -53,8 +57,8 @@ export default function NavigationBar({ navLinks: customNavLinks, profile }: Nav
   ]
 
   const links = customNavLinks && customNavLinks.length > 0 ? customNavLinks : defaultNavLinks
-  const logoText = profile?.displayName || 'REIN'
-  const copyrightName = profile?.displayName || 'PHUOC TAI'
+  const logoText = customLogoText || 'REIN'
+  const copyrightName = customCopyrightName || 'PHUOC TAI'
 
   const toggleMenu = () => setIsOpen(!isOpen)
 

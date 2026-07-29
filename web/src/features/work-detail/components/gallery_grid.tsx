@@ -3,6 +3,20 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { urlFor } from '@/lib/sanity/image'
+import Image from 'next/image'
+import { cn } from '@/utils/cn'
+
+function getImageDimensions(image: any) {
+  const ref = image?.asset?._ref || image?.asset?._id
+  if (!ref) return { width: 720, height: 1520 }
+  const parts = ref.split('-')
+  if (parts.length < 3) return { width: 720, height: 1520 }
+  const [wStr, hStr] = parts[2].split('x')
+  const width = parseInt(wStr, 10)
+  const height = parseInt(hStr, 10)
+  if (isNaN(width) || isNaN(height)) return { width: 720, height: 1520 }
+  return { width, height }
+}
 
 /** Smart gallery grid:
  *  1 image  → full width, aspect-video
@@ -12,11 +26,53 @@ import { urlFor } from '@/lib/sanity/image'
  *  5 images → 1 full (video) + 2 columns + 2 columns
  *  Each element animates independently on scroll.
  */
-export default function GalleryGrid({ images, alt }: { images: any[]; alt: string }) {
+export default function GalleryGrid({
+  images,
+  alt,
+  projectType = 'desktop',
+  imageFit = 'cover',
+}: {
+  images: any[]
+  alt: string
+  projectType?: 'desktop' | 'mobile'
+  imageFit?: 'cover' | 'contain'
+}) {
   if (!images || images.length === 0) return null
 
   const count = images.length
   const ease = [0.16, 1, 0.3, 1] as const
+
+  if (projectType === 'mobile') {
+    return (
+      <div className="flex flex-wrap justify-center gap-6 md:gap-8 w-full">
+        {images.map((image, idx) => {
+          const { width, height } = getImageDimensions(image)
+          return (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 60 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '50px 0px' }}
+              transition={{ duration: 1.2, ease, delay: idx * 0.1 }}
+              className="w-[calc(50%-12px)] md:w-[calc(33.333%-22px)] lg:w-[calc(25%-24px)] max-w-[220px] md:max-w-[260px] flex-shrink-0 animate-none"
+            >
+              <div className="relative border-[6px] md:border-[8px] border-black rounded-[20px] md:rounded-[28px] shadow-2xl overflow-hidden bg-black select-none">
+                <Image
+                  src={urlFor(image).width(720).url()}
+                  alt={`${alt} Screenshot ${idx + 1}`}
+                  width={width}
+                  height={height}
+                  className="w-full h-auto block"
+                  sizes="(max-width: 768px) 50vw, 25vw"
+                  loading="lazy"
+                />
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
+    )
+  }
 
   // Full-width cell → aspect-video
   const SoloCell = ({ image, index, delay = 0 }: { image: any; index: number; delay?: number }) => (
@@ -25,12 +81,20 @@ export default function GalleryGrid({ images, alt }: { images: any[]; alt: strin
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '50px 0px' }}
       transition={{ duration: 1.2, ease, delay }}
-      className="w-full aspect-16/8 bg-[#F5F5F5] overflow-hidden select-none"
+      className="w-full aspect-16/8 bg-[#F5F5F5] overflow-hidden select-none relative"
     >
-      <img
-        src={urlFor(image).width(1600).height(900).url()}
+      <Image
+        src={imageFit === 'contain'
+          ? urlFor(image).width(1600).url()
+          : urlFor(image).width(1600).height(900).url()
+        }
         alt={`${alt} ${index + 1}`}
-        className="w-full h-full object-cover"
+        fill
+        sizes="100vw"
+        className={cn(
+          "w-full h-full",
+          imageFit === 'contain' ? 'object-contain' : 'object-cover'
+        )}
         loading="lazy"
       />
     </motion.div>
@@ -43,12 +107,20 @@ export default function GalleryGrid({ images, alt }: { images: any[]; alt: strin
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '50px 0px' }}
       transition={{ duration: 1.2, ease, delay }}
-      className="w-full aspect-square bg-[#F5F5F5] overflow-hidden select-none"
+      className="w-full aspect-square bg-[#F5F5F5] overflow-hidden select-none relative"
     >
-      <img
-        src={urlFor(image).width(1200).height(1200).url()}
+      <Image
+        src={imageFit === 'contain'
+          ? urlFor(image).width(1200).url()
+          : urlFor(image).width(1200).height(1200).url()
+        }
         alt={`${alt} ${index + 1}`}
-        className="w-full h-full object-cover"
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className={cn(
+          "w-full h-full",
+          imageFit === 'contain' ? 'object-contain' : 'object-cover'
+        )}
         loading="lazy"
       />
     </motion.div>

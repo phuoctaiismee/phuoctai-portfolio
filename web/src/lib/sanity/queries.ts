@@ -75,14 +75,24 @@ export const PROFILE_QUERY = defineQuery(
     "aboutImageUrl": aboutImage.asset->url,
     aboutDescription,
     skillsGroups[] {
+      _key,
       category,
       skills
+    },
+    services[] {
+      _key,
+      name,
+      "image": image.asset->url
+    },
+    faqs[] {
+      question,
+      answer
     }
   }`
 )
 
 export const FEATURED_WORKS_QUERY = defineQuery(
-  `*[_type == "work" && defined(slug.current)] | order(year desc, _createdAt desc)[0...$limit] {
+  `*[_type == "work" && defined(slug.current) && featured == true] | order(year desc, _createdAt desc)[0...$limit] {
     _id,
     title,
     "slug": slug.current,
@@ -115,6 +125,10 @@ export const WORK_DETAIL_QUERY = defineQuery(
     experience,
     liveLink,
     githubLink,
+    figmaLink,
+    appStoreLink,
+    playStoreLink,
+    projectType,
     skills,
     aboutRichText,
     aboutGallery,

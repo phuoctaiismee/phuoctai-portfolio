@@ -7,6 +7,7 @@ import { ProfileData, WorkItem } from '@/core/entities'
 import Button from '@/components/ui/button'
 import EmailCopy from '@/components/shared/email-copy'
 import ProjectCard from '@/components/shared/project-card'
+import SectionHeader from '@/components/ui/section-header'
 
 const HomeScreen = async () => {
   const [worksResult, profileResult] = await Promise.all([
@@ -79,18 +80,9 @@ const HomeScreen = async () => {
 
       {/* Featured Works Section */}
       <section className="flex flex-col gap-[30px]">
-        <motion.div
-          initial={{ opacity: 0, y: 160 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '100px 0px' }}
-          transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-end justify-between pb-2"
-        >
-          <h2 className="text-[19px] md:text-[24px] xl:text-[30px] font-medium tracking-[-0.03em] text-black">
-            work.
-          </h2>
+        <SectionHeader title="work.">
           {works.length > 0 && <Button href="/works">Show More</Button>}
-        </motion.div>
+        </SectionHeader>
 
         {works.length === 0 ? (
           <div className="py-[80px] text-center border border-dashed border-[#E0E0E0]">

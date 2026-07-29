@@ -1,4 +1,5 @@
 export interface AppSettingsData {
+    logoText?: string
     navLinks?: Array<{
         label: string
         href: string

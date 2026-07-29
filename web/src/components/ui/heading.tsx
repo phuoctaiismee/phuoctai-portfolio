@@ -21,7 +21,7 @@ export default function TextHeading({
   let styleClass = ''
   switch (tag) {
     case 'h1':
-      styleClass = 'text-[76px] md:text-[116px] xl:text-[174px] font-semibold leading-[1.0] tracking-[-0.09em]'
+      styleClass = 'text-[76px] md:text-[116px] xl:text-[174px] font-semibold leading-[1.0] tracking-tighter'
       break
     case 'h2':
       styleClass = 'text-[40px] md:text-[56px] xl:text-[80px] font-bold leading-none tracking-tighter uppercase'
