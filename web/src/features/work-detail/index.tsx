@@ -223,7 +223,7 @@ export default async function WorkDetailPage({ params }: Props) {
                   transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
                 },
               }}
-              className="max-w-[200px] lg:ms-auto"
+              className="w-full md:max-w-[200px] lg:ms-auto"
             >
               <span className="text-base uppercase text-[#B3B3B3] block">
                 Tech Stack
