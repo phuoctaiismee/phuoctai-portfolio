@@ -281,7 +281,7 @@ export default async function WorkDetailPage({ params }: Props) {
       {/* 1. ABOUT SECTION */}
       <section className="flex flex-col w-full gap-[30px] py-12">
         <SectionHeader title="about.">
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap justify-end gap-4">
             {[
               { url: work.liveLink, label: 'See It Live' },
               { url: work.appStoreLink, label: 'App Store' },
