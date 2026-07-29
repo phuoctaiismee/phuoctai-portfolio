@@ -53,6 +53,7 @@ export default function NavigationBar({
   const defaultNavLinks = [
     { href: '/works', label: 'Works' },
     { href: '/about', label: 'About' },
+    { href: '/articles', label: 'Articles' },
     { href: '/contact', label: 'Contact' },
   ]
 

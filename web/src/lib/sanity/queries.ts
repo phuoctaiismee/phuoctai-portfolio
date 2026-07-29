@@ -175,3 +175,19 @@ export const EXPERIENCES_QUERY = defineQuery(
     techStack
   }`
 )
+
+export const RELATED_POSTS_QUERY = defineQuery(
+  `*[_type == "post" && slug.current != $slug && defined(slug.current)] | order(publishedAt desc, _createdAt desc)[0...$limit] {
+    _id,
+    title,
+    "slug": slug.current,
+    mainImage {
+      asset->{
+        _id,
+        url
+      },
+      alt
+    },
+    publishedAt
+  }`
+)
