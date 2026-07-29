@@ -18,7 +18,8 @@ export async function POST(req: NextRequest) {
     }
 
     // Revalidate the cache tag matching the document type (e.g. 'work' or 'profile')
-    revalidateTag(body._type, { expire: 0 })
+    // In Next.js 16+, revalidateTag requires a second 'profile' argument; 'max' triggers immediate expiry.
+    revalidateTag(body._type, 'max')
 
     return NextResponse.json({ revalidated: true, now: Date.now(), body })
   } catch (err) {

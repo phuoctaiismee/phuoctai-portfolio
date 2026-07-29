@@ -16,17 +16,53 @@ const inter = Inter({
   variable: '--font-sans',
 })
 
-export const metadata: Metadata = {
-  title: {
-    default: 'PhuocTai | Software Engineer',
-    template: '%s | PhuocTai',
-  },
-  description: 'Software engineer portfolio of PhuocTai — building modern web applications with React, Next.js, and Node.js.',
-  openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    siteName: 'PhuocTai Portfolio',
-  },
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+
+export async function generateMetadata(): Promise<Metadata> {
+  // Disable stega so Visual Editing characters never leak into <head> tags
+  const { data: profile } = (await sanityFetch({
+    query: PROFILE_QUERY,
+    stega: false,
+  })) as { data: ProfileData | null }
+
+  const displayName = profile?.displayName || 'PhuocTai'
+  const headline = profile?.headline || 'Software Engineer'
+  const description =
+    profile?.shortBio ||
+    'Software engineer portfolio of PhuocTai — building modern web applications with React, Next.js, and Node.js.'
+  const avatarUrl = profile?.avatarUrl
+
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: `${displayName} | ${headline}`,
+      template: `%s | ${displayName}`,
+    },
+    description,
+    openGraph: {
+      type: 'website',
+      locale: 'en_US',
+      siteName: `${displayName} Portfolio`,
+      url: siteUrl,
+      title: `${displayName} | ${headline}`,
+      description,
+      ...(avatarUrl && {
+        images: [{ url: avatarUrl, width: 1200, height: 630, alt: displayName }],
+      }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `${displayName} | ${headline}`,
+      description,
+      ...(avatarUrl && { images: [avatarUrl] }),
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  }
 }
 
 export default async function RootLayout({

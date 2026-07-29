@@ -154,12 +154,32 @@ export const RELATED_WORKS_QUERY = defineQuery(
   }`
 )
 
-export const WORK_QUERY = defineQuery(
-  `*[_type == "work"][0]{ ... }`
+export const APP_SETTINGS_QUERY = defineQuery(
+  `*[_type == "app-settings"][0]{
+    _id,
+    logoText,
+    navLinks[] {
+      label,
+      href
+    },
+    footerCta,
+    isAvailable,
+    availabilityText,
+    phoneNumber,
+    copyrightName,
+    socialLinks[] {
+      platformName,
+      url
+    }
+  }`
 )
 
-export const APP_SETTINGS_QUERY = defineQuery(
-  `*[_type == "app-settings"][0]{ ... }`
+export const SITEMAP_QUERY = defineQuery(
+  `*[_type in ["post", "work"] && defined(slug.current)] {
+    _type,
+    "slug": slug.current,
+    _updatedAt
+  }`
 )
 
 export const EXPERIENCES_QUERY = defineQuery(
